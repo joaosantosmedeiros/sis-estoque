@@ -17,11 +17,17 @@ import { FindProductByNameUseCase } from '@application/usecases/product/find-pro
 import { DeleteProductUsecase } from '@application/usecases/product/delete-product.usecase';
 import { UpdateProductUseCase } from '@application/usecases/product/update-product.usecase';
 import { ProductController } from './controllers/product.controller';
+import { CreateStockUseCase } from '@application/usecases/stock/create-stock.usecase';
+import { ListStockUseCase } from '@application/usecases/stock/list-stock.usecase';
+import { FindStockByIdUseCase } from '@application/usecases/stock/find-stock-by-id.usecase';
+import { FindStockByProductUseCase } from '@application/usecases/stock/find-stock-by-product.usecase';
+import { StockController } from './controllers/stock.controller';
+import { UpdateStockUseCase } from '@application/usecases/stock/update-stock.usecase';
 import { FindCategoryContainingNameUseCase } from '@application/usecases/category/find-category-containing-name.usecase';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [CategoryController, ProductController],
+  controllers: [CategoryController, ProductController, StockController],
   providers: [
     { provide: APP_INTERCEPTOR, useClass: ErrorInterceptor },
     CreateCategoryUseCase,
@@ -39,6 +45,12 @@ import { FindCategoryContainingNameUseCase } from '@application/usecases/categor
     FindProductByNameUseCase,
     UpdateProductUseCase,
     DeleteProductUsecase,
+
+    CreateStockUseCase,
+    ListStockUseCase,
+    FindStockByIdUseCase,
+    FindStockByProductUseCase,
+    UpdateStockUseCase,
   ],
 })
 export class HttpModule {}
