@@ -22,7 +22,7 @@ import { UtilsService } from '../../../shared/services/utils.service';
 import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-  selector: 'app-product-detail',
+  selector: 'app-product-form',
   imports: [
     MatDialogModule,
     ReactiveFormsModule,
@@ -33,8 +33,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatButtonModule,
     MatSelectModule,
   ],
-  templateUrl: './product-detail.component.html',
-  styleUrl: './product-detail.component.scss',
+  templateUrl: './product-form.component.html',
+  styleUrl: './product-form.component.scss',
 })
 export class ProductDetailComponent implements OnInit {
   constructor(
@@ -96,12 +96,6 @@ export class ProductDetailComponent implements OnInit {
     };
 
     this.dialogRef.close(request);
-  }
-
-  remove(): void {
-    if (!this.product) return;
-
-    this.dialogRef.close({ removeId: this.product.id });
   }
 
   get name() {

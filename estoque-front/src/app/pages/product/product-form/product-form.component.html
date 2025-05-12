@@ -41,9 +41,6 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  @if (data.action == 'Editar') {
-    <button mat-mini-fab [mat-dialog-close]="true" (click)="remove()"><mat-icon>delete</mat-icon></button>
-  }
   <button mat-mini-fab form="form" type="submit" (click)="submit()" ><mat-icon>{{ data.action == 'Cadastrar' ? 'check' : 'edit' }} </mat-icon></button>
   <button mat-mini-fab [mat-dialog-close]="true" cdkFocusInitial><mat-icon>close</mat-icon></button>
 </mat-dialog-actions>

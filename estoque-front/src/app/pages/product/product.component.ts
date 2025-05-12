@@ -14,10 +14,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { UtilsService } from '../../shared/services/utils.service';
 import { Product } from '../../shared/models/product';
-import { ProductDetailComponent } from './product-detail/product-detail.component';
+import { ProductDetailComponent } from './product-form/product-form.component';
 import { CategoryService } from '../category/service/category.service';
 import { Category } from '../../shared/models/category';
 import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { ViewProductComponent } from './view-product/view-product.component';
 
 @Component({
   selector: 'app-product',
@@ -29,6 +31,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatIconModule,
     MatButtonModule,
     MatSelectModule,
+    MatTableModule,
   ],
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss',
@@ -44,6 +47,8 @@ export class ProductComponent implements OnInit {
   categories: Category[] = [];
   products: Product[] = [];
   filteredProducts: Product[] = [];
+
+  displayedColumns: string[] = ['position', 'name', 'actions'];
 
   dialog = inject(MatDialog);
 
@@ -93,7 +98,16 @@ export class ProductComponent implements OnInit {
     }
   }
 
-  async editDialog(product: Product) {
+  async viewDialog(product: any) {
+    await this.utilsService.openDialog({
+      component: ViewProductComponent,
+      data: {
+        product,
+      },
+    });
+  }
+
+  async editDialog(product: any) {
     const result = await this.utilsService.openDialog({
       component: ProductDetailComponent,
       data: {
@@ -109,6 +123,12 @@ export class ProductComponent implements OnInit {
     if (result && result.name) {
       this.edit(product.id, result);
     }
+  }
+
+  async deleteDialog(id: number) {
+    const result = await this.utilsService.deleteDialog();
+
+    if(result) this.remove(id);
   }
 
   private insert(product: Product) {

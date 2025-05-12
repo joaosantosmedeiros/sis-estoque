@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ErrorDialogComponent } from '../components/error-dialog/error-dialog.component';
 import { ComponentType } from '@angular/cdk/overlay';
+import { MessageDialogConfirmComponent } from '../components/message-dialog-confirm/message-dialog-confirm.component';
 
 @Injectable({
   providedIn: 'root',
@@ -43,6 +44,28 @@ export class UtilsService {
       dialogRef.afterClosed().subscribe((result) => {
         resolve(result);
       });
+    });
+  }
+
+  deleteDialog() {
+    const dialogRef = this.dialog.open(MessageDialogConfirmComponent, {
+      data: 'O conteúdo apagado não pode ser recuperado, Deseja excluir?',
+      minWidth: '17%',
+      minHeight: 'auto',
+      disableClose: true,
+    });
+
+    return new Promise((resolve) => {
+      dialogRef.afterClosed().subscribe((result) => {
+        resolve(result);
+      });
+    });
+  }
+
+  convertToReal(value: number) {
+    return value.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
     });
   }
 }
