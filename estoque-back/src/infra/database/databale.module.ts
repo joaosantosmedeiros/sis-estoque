@@ -6,6 +6,8 @@ import { ProductRepository } from '@application/repositories/product.repository'
 import { PrismaProductRepository } from './prisma/repository/prisma-product.repository';
 import { StockRepository } from '@application/repositories/stock.repository';
 import { PrismaStockRepository } from './prisma/repository/prisma-stock.repository';
+import { LogRepository } from '@application/repositories/log.repository';
+import { PrismaLogRepository } from './prisma/repository/prisma-log.repository';
 
 @Module({
   providers: [
@@ -22,7 +24,16 @@ import { PrismaStockRepository } from './prisma/repository/prisma-stock.reposito
       provide: StockRepository,
       useClass: PrismaStockRepository,
     },
+    {
+      provide: LogRepository,
+      useClass: PrismaLogRepository,
+    },
   ],
-  exports: [CategoryRepository, ProductRepository, StockRepository],
+  exports: [
+    CategoryRepository,
+    ProductRepository,
+    StockRepository,
+    LogRepository,
+  ],
 })
 export class DatabaseModule {}
