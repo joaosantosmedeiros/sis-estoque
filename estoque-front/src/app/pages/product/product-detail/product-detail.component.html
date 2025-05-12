@@ -1,0 +1,49 @@
+<h2 mat-dialog-title> {{data.action}} Produto</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" id="form">
+    <div class="row">
+      <mat-form-field>
+        <mat-label>Nome</mat-label>
+        <input matInput [formControlName]="'name'" />
+        @if (name.errors && name.errors['required']) {
+          <mat-error>Nome é obrigatório</mat-error>
+        }
+        <mat-hint align="end">{{name.value.toString().length}} / 60</mat-hint>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Categoria</mat-label>
+        <mat-select value="{{ product?.category?.id }}" formControlName="category">
+          <mat-option [value]=""> - </mat-option>
+          @for (category of categories; track category.id) {
+            <mat-option [value]="category.id">{{category.name}}</mat-option>
+          }
+        </mat-select>
+        @if (category.errors) {
+          <mat-error>Categoria é obrigatória</mat-error>
+        }
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <mat-form-field>
+        <mat-label>Preço</mat-label>
+        <input matInput type="number" [formControlName]="'price'" />
+        @if (price.errors?.['required']) {
+          <mat-error>Preço é obrigatório</mat-error>
+        }
+        @if (price.errors?.['max']) {
+          <mat-error>Preço máximo: 10.000,00</mat-error>
+        }
+        @if (price.errors?.['min']) {
+          <mat-error>Preço mínimo: 1,00</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  @if (data.action == 'Editar') {
+    <button mat-mini-fab [mat-dialog-close]="true" (click)="remove()"><mat-icon>delete</mat-icon></button>
+  }
+  <button mat-mini-fab form="form" type="submit" (click)="submit()" ><mat-icon>{{ data.action == 'Cadastrar' ? 'check' : 'edit' }} </mat-icon></button>
+  <button mat-mini-fab [mat-dialog-close]="true" cdkFocusInitial><mat-icon>close</mat-icon></button>
+</mat-dialog-actions>
