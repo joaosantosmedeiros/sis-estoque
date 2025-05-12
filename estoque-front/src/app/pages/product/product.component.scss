@@ -1,0 +1,65 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  padding: 1em 2em;
+}
+
+.input {
+  display: flex;
+  gap: 2em;
+  justify-content: center;
+}
+
+form {
+  max-width: 400px;
+}
+
+mat-icon {
+  color: rgb(30, 30, 140);
+}
+
+.filter {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.product {
+  cursor: pointer;
+  display: inline-block;
+  font-weight: 700;
+  color: rgb(30, 30, 140);
+  font-size: 19px !important;
+}
+
+.product:hover {
+  transform: scale(1.1);
+  transition: all .25s;
+}
+
+@media screen and (min-width: 600px) {
+  .main {
+    padding: 2em 10em;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  .main-products {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .main-products p {
+    margin: 10px;
+  }
+
+  form {
+    width: 90%;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+}

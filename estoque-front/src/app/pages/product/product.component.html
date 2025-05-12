@@ -1,0 +1,38 @@
+<div class="main">
+  <div class="input">
+    <form [formGroup]="form">
+      <mat-form-field>
+        <mat-label>Produto</mat-label>
+        <input matInput [formControlName]="'name'" />
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Categoria</mat-label>
+        <mat-select formControlName="category">
+          <mat-option value=""> - </mat-option>
+          @for (category of categories; track category.id) {
+            <mat-option [value]="category.id">{{category.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </form>
+    <div class="filter">
+      <button (click)="clearSearch()" mat-mini-fab>
+        <mat-icon>filter_alt_off</mat-icon>
+      </button>
+      <button (click)="search()" mat-mini-fab>
+        <mat-icon>search</mat-icon>
+      </button>
+      <button (click)="insertDialog()" mat-mini-fab>
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="main-products">
+    @for (product of filteredProducts; track product.id) {
+    <p>
+      <span class="product" (click)="editDialog(product)">{{ product.name }}</span>
+    </p>
+    }
+  </div>
+</div>
