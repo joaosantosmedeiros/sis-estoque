@@ -9,10 +9,19 @@ import { ListCategoriesUseCase } from '@application/usecases/category/list-categ
 import { UpdateCategoryUseCase } from '@application/usecases/category/update-category.usecase';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { CreateProductUseCase } from '@application/usecases/product/create-product.usecase';
+import { ListProductsUseCase } from '@application/usecases/product/list-products.usecase';
+import { FindProductByCategory } from '@application/usecases/product/find-product-by-category.usecase';
+import { FindProductByIdUseCase } from '@application/usecases/product/find-product-by-id.usecase';
+import { FindProductByNameUseCase } from '@application/usecases/product/find-product-by-name.usecase';
+import { DeleteProductUsecase } from '@application/usecases/product/delete-product.usecase';
+import { UpdateProductUseCase } from '@application/usecases/product/update-product.usecase';
+import { ProductController } from './controllers/product.controller';
 import { FindCategoryContainingNameUseCase } from '@application/usecases/category/find-category-containing-name.usecase';
+
 @Module({
   imports: [DatabaseModule],
-  controllers: [CategoryController],
+  controllers: [CategoryController, ProductController],
   providers: [
     { provide: APP_INTERCEPTOR, useClass: ErrorInterceptor },
     CreateCategoryUseCase,
@@ -22,6 +31,14 @@ import { FindCategoryContainingNameUseCase } from '@application/usecases/categor
     FindCategoryContainingNameUseCase,
     UpdateCategoryUseCase,
     DeleteCategoryUseCase,
+
+    CreateProductUseCase,
+    ListProductsUseCase,
+    FindProductByCategory,
+    FindProductByIdUseCase,
+    FindProductByNameUseCase,
+    UpdateProductUseCase,
+    DeleteProductUsecase,
   ],
 })
 export class HttpModule {}

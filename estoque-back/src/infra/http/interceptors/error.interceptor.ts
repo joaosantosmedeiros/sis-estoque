@@ -8,6 +8,7 @@ import {
   NestInterceptor,
   NotFoundException,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import { Observable, catchError } from 'rxjs';
 
@@ -24,7 +25,7 @@ export class ErrorInterceptor implements NestInterceptor {
         ) {
           throw new ConflictException(error.message);
         } else {
-          throw error;
+          throw new BadRequestException(error.message);
         }
       }),
     );
