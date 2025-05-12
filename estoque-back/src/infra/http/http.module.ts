@@ -22,12 +22,22 @@ import { ListStockUseCase } from '@application/usecases/stock/list-stock.usecase
 import { FindStockByIdUseCase } from '@application/usecases/stock/find-stock-by-id.usecase';
 import { FindStockByProductUseCase } from '@application/usecases/stock/find-stock-by-product.usecase';
 import { StockController } from './controllers/stock.controller';
+import { LogController } from './controllers/log.controller';
+import { FindLogByIdUseCase } from '@application/usecases/log/find-log-by-id.usecase';
+import { FindLogByStock } from '@application/usecases/log/find-log-by-stock.usecase';
+import { CreateLogUseCase } from '@application/usecases/log/create-log.usecase';
+import { ListLogUseCase } from '@application/usecases/log/list-logs.usecase';
 import { UpdateStockUseCase } from '@application/usecases/stock/update-stock.usecase';
 import { FindCategoryContainingNameUseCase } from '@application/usecases/category/find-category-containing-name.usecase';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [CategoryController, ProductController, StockController],
+  controllers: [
+    CategoryController,
+    ProductController,
+    StockController,
+    LogController,
+  ],
   providers: [
     { provide: APP_INTERCEPTOR, useClass: ErrorInterceptor },
     CreateCategoryUseCase,
@@ -51,6 +61,11 @@ import { FindCategoryContainingNameUseCase } from '@application/usecases/categor
     FindStockByIdUseCase,
     FindStockByProductUseCase,
     UpdateStockUseCase,
+
+    CreateLogUseCase,
+    FindLogByIdUseCase,
+    FindLogByStock,
+    ListLogUseCase,
   ],
 })
 export class HttpModule {}
