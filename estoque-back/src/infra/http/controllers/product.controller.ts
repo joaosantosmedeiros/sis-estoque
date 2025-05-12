@@ -7,6 +7,7 @@ import { FindProductByIdUseCase } from '@application/usecases/product/find-produ
 import { FindProductByNameUseCase } from '@application/usecases/product/find-product-by-name.usecase';
 import { ListProductsUseCase } from '@application/usecases/product/list-products.usecase';
 import { UpdateProductUseCase } from '@application/usecases/product/update-product.usecase';
+import { CreateStockUseCase } from '@application/usecases/stock/create-stock.usecase';
 import { CreateProductDto } from '@infra/dto/create-product.dto';
 import { ReturnProductDto } from '@infra/dto/return-product.dto';
 import {
@@ -32,6 +33,8 @@ export class ProductController {
     private findProductByCategoryUseCase: FindProductByCategory,
     private deleteProductByIdUseCase: DeleteProductUsecase,
     private updateProductUseCase: UpdateProductUseCase,
+
+    private createStockUseCase: CreateStockUseCase,
   ) {}
 
   @Get()
@@ -67,8 +70,14 @@ export class ProductController {
   @Post()
   async create(@Body() body: CreateProductDto): Promise<ReturnProductDto> {
     await this.findCategoryByIdUseCase.execute(body.categoryId);
+    const product = await this.createProductUseCase.execute(body);
 
-    return new ReturnProductDto(await this.createProductUseCase.execute(body));
+    await this.createStockUseCase.execute({
+      productId: product.id!,
+      quantity: 0,
+    });
+
+    return new ReturnProductDto(product);
   }
 
   @Put(':id')
