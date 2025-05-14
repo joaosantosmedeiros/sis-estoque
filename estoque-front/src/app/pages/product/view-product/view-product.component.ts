@@ -8,6 +8,8 @@ import { Product } from '../../../shared/models/product';
 import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { UtilsService } from '../../../shared/services/utils.service';
+import { StockService } from '../service/stock.service';
+import { Stock } from '../../../shared/models/stock';
 
 @Component({
   selector: 'app-view-product',
@@ -20,15 +22,33 @@ export class ViewProductComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     @Optional() private dialogRef: MatDialogRef<ViewProductComponent>,
     public utilsService: UtilsService,
+    private stockService: StockService
   ) {}
 
   product: Product | null = null;
+  stock: Stock | null = null;
 
   ngOnInit(): void {
     this.initiateData();
+    this.getStock();
   }
 
   initiateData(): void {
     this.product = this.data.product ?? null;
+  }
+
+  getStock(): void {
+    if (!this.product) return;
+
+    this.stockService.findByProduct(this.product.id).subscribe({
+      next: (stock: Stock) => {
+        this.stock = stock;
+      },
+      error: (err) => {
+        this.utilsService.onError(
+          err.error?.message || 'Erro ao carregar estoque!'
+        );
+      },
+    });
   }
 }
