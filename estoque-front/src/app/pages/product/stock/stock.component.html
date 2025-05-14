@@ -1,0 +1,24 @@
+<h2 mat-dialog-title> {{data.action}} Estoque &lt;{{ stock?.product?.name }}&gt; </h2>
+<mat-dialog-content>
+  <form [formGroup]="form" id="form">
+    <div class="row">
+      <mat-form-field>
+        <mat-label>Quantidade</mat-label>
+        <input type="number" matInput [formControlName]="'quantity'" />
+        @if (quantity.errors && quantity.errors['required']) {
+          <mat-error>Quantidade é obrigatória</mat-error>
+        }
+        @if (quantity.errors && quantity.errors['min']) {
+          <mat-error>Quantidade mínima 0</mat-error>
+        }
+        @if (quantity.errors && quantity.errors['max']) {
+          <mat-error>Quantidade máxima: 10000</mat-error>
+        }
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-mini-fab form="form" type="submit" (click)="submit()" ><mat-icon>edit</mat-icon></button>
+  <button mat-mini-fab [mat-dialog-close]="true" cdkFocusInitial><mat-icon>close</mat-icon></button>
+</mat-dialog-actions>
