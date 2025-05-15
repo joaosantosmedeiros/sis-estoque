@@ -25,7 +25,9 @@ export class ErrorInterceptor implements NestInterceptor {
         ) {
           throw new ConflictException(error.message);
         } else {
-          throw new BadRequestException(error.message);
+          throw new BadRequestException(
+            error.response?.message ?? error.message,
+          );
         }
       }),
     );
