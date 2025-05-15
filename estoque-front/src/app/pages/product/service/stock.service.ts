@@ -29,7 +29,6 @@ export class StockService {
   }
 
   edit(id: number, stockRequest: StockRequest): Observable<Stock> {
-    console.log(this.stockBaseUrl + `/${id}`);
     return this.http.put<Stock>(this.stockBaseUrl + `/${id}`, stockRequest);
   }
 

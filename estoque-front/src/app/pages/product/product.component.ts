@@ -121,9 +121,18 @@ export class ProductComponent implements OnInit {
           },
         });
 
-        if (!result) return;
+        if (!result || !result.quantity) return;
 
-        // TODO: Atualizar o estoque atraves do log
+        this.stockService
+          .edit(stock.id, { quantity: result.quantity })
+          .subscribe({
+            next: () =>
+              this.snackbarService.open('Estoque atualizado com sucesso!'),
+            error: (err) =>
+              this.utilsService.onError(
+                err.error?.message ?? 'Erro ao atualizar estoque!'
+              ),
+          });
       },
       error: (err) =>
         this.utilsService.onError(
