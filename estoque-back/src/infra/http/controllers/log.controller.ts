@@ -42,18 +42,4 @@ export class LogController {
     );
   }
 
-  @Post()
-  async create(@Body() body: CreateLogDto): Promise<ReturnLogDto> {
-    const stock: Stock = await this.findStockByIdUseCase.execute(body.stockId);
-
-    await this.updateStockUseCase.execute(stock, body.quantity);
-
-    return new ReturnLogDto(
-      await this.createLogUseCase.execute({
-        date: body.date,
-        quantity: body.quantity,
-        stock,
-      }),
-    );
-  }
 }
