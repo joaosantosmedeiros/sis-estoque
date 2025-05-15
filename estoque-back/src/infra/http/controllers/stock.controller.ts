@@ -1,12 +1,15 @@
+import { CreateLogUseCase } from '@application/usecases/log/create-log.usecase';
 import { FindProductByIdUseCase } from '@application/usecases/product/find-product-by-id.usecase';
 import { CreateStockUseCase } from '@application/usecases/stock/create-stock.usecase';
 import { FindStockByIdUseCase } from '@application/usecases/stock/find-stock-by-id.usecase';
 import { FindStockByProductUseCase } from '@application/usecases/stock/find-stock-by-product.usecase';
 import { ListStockUseCase } from '@application/usecases/stock/list-stock.usecase';
+import { UpdateStockUseCase } from '@application/usecases/stock/update-stock.usecase';
 
 import { CreateStockDto } from '@infra/dto/create-stock.dto';
 import { ReturnStockDto } from '@infra/dto/return-stock.dto';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { UpdateStockDto } from '@infra/dto/update-stock-dto';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 
 @Controller('stock')
 export class StockController {
@@ -15,8 +18,10 @@ export class StockController {
     private readonly listStockUseCase: ListStockUseCase,
     private readonly findStockByIdUseCase: FindStockByIdUseCase,
     private readonly findStockByProductUseCase: FindStockByProductUseCase,
-
+    private readonly updateStockUseCase: UpdateStockUseCase,
     private readonly findProductByIdUseCase: FindProductByIdUseCase,
+
+    private readonly createLogUseCase: CreateLogUseCase,
   ) {}
 
   @Get()
@@ -47,5 +52,25 @@ export class StockController {
     await this.findProductByIdUseCase.execute(body.productId);
 
     return new ReturnStockDto(await this.createStockUseCase.execute(body));
+  }
+
+  @Put(':id')
+  async update(
+    @Param('id') id: number,
+    @Body() body: UpdateStockDto,
+  ): Promise<ReturnStockDto> {
+    id = Number(id);
+    const stock = await this.findStockByIdUseCase.execute(id);
+    const updatedStock = await this.updateStockUseCase.execute(
+      stock,
+      body.quantity,
+    );
+    await this.createLogUseCase.execute({
+      date: new Date(),
+      quantity: updatedStock.quantity - stock.quantity,
+      stock,
+    });
+
+    return new ReturnStockDto(updatedStock);
   }
 }

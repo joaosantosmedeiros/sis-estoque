@@ -20,6 +20,9 @@ import { Category } from '../../shared/models/category';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { ViewProductComponent } from './view-product/view-product.component';
+import { StockService } from './service/stock.service';
+import { Stock } from '../../shared/models/stock';
+import { StockComponent } from './stock/stock.component';
 
 @Component({
   selector: 'app-product',
@@ -41,7 +44,8 @@ export class ProductComponent implements OnInit {
     private categoryService: CategoryService,
     private productService: ProductService,
     private snackbarService: SnackbarService,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private stockService: StockService
   ) {}
 
   categories: Category[] = [];
@@ -107,6 +111,27 @@ export class ProductComponent implements OnInit {
     });
   }
 
+  async viewStock(id: number) {
+    this.stockService.findByProduct(id).subscribe({
+      next: async (stock: Stock) => {
+        const result = await this.utilsService.openDialog({
+          component: StockComponent,
+          data: {
+            stock,
+          },
+        });
+
+        if (!result) return;
+
+        // TODO: Atualizar o estoque atraves do log
+      },
+      error: (err) =>
+        this.utilsService.onError(
+          err.error?.message ?? 'Erro ao carregar estoque!'
+        ),
+    });
+  }
+
   async editDialog(product: any) {
     const result = await this.utilsService.openDialog({
       component: ProductDetailComponent,
@@ -116,10 +141,6 @@ export class ProductComponent implements OnInit {
       },
     });
 
-    if (result && result.removeId && typeof result.removeId == 'number') {
-      this.remove(result.removeId);
-    }
-
     if (result && result.name) {
       this.edit(product.id, result);
     }
@@ -128,7 +149,7 @@ export class ProductComponent implements OnInit {
   async deleteDialog(id: number) {
     const result = await this.utilsService.deleteDialog();
 
-    if(result) this.remove(id);
+    if (result) this.remove(id);
   }
 
   private insert(product: Product) {

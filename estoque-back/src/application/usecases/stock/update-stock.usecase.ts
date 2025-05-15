@@ -7,9 +7,8 @@ export class UpdateStockUseCase {
   constructor(private readonly stockRepository: StockRepository) {}
 
   async execute(stock: Stock, quantity: number): Promise<Stock> {
-    if (stock.quantity + quantity < 0)
-      throw new Error('Stock quantity must be positive.');
+    if (quantity < 0) throw new Error('Stock quantity must be positive.');
 
-    return this.stockRepository.update(stock.id!, stock.quantity + quantity);
+    return this.stockRepository.update(stock.id!, quantity);
   }
 }

@@ -1,8 +1,8 @@
-import { IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
+import { IsNotEmpty, IsNumber, Min } from 'class-validator';
 
 export class UpdateStockDto {
   @IsNumber()
   @IsNotEmpty()
-  @IsPositive()
+  @Min(0)
   quantity: number;
 }
