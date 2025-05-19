@@ -6,7 +6,7 @@ import { Log } from '@application/entities/log';
 
 @Injectable()
 export class PrismaLogRepository implements LogRepository {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async findById(id: number): Promise<Log | null> {
     const raw = await this.prismaService.log.findUnique({
@@ -14,7 +14,11 @@ export class PrismaLogRepository implements LogRepository {
         id,
       },
       include: {
-        stock: true,
+        stock: {
+          include: {
+            product: true,
+          },
+        },
       },
     });
 
@@ -28,7 +32,11 @@ export class PrismaLogRepository implements LogRepository {
           stockId,
         },
         include: {
-          stock: true,
+          stock: {
+            include: {
+              product: true,
+            },
+          },
         },
       })
     ).map((prismaLog) => PrismaLogMapper.toDomain(prismaLog));
@@ -38,7 +46,11 @@ export class PrismaLogRepository implements LogRepository {
     return (
       await this.prismaService.log.findMany({
         include: {
-          stock: true,
+          stock: {
+            include: {
+              product: true,
+            },
+          },
         },
         orderBy: [{ id: 'asc' }],
       })

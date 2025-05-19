@@ -1,24 +1,15 @@
-import { CreateLogUseCase } from '@application/usecases/log/create-log.usecase';
 import { FindLogByIdUseCase } from '@application/usecases/log/find-log-by-id.usecase';
-
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { FindLogByStock } from '@application/usecases/log/find-log-by-stock.usecase';
 import { ListLogUseCase } from '@application/usecases/log/list-logs.usecase';
-import { CreateLogDto } from '@infra/dto/create-log.dto';
 import { ReturnLogDto } from '@infra/dto/return-log.dto';
-import { FindStockByIdUseCase } from '@application/usecases/stock/find-stock-by-id.usecase';
-import { Stock } from '@application/entities/stock';
-import { UpdateStockUseCase } from '@application/usecases/stock/update-stock.usecase';
 
 @Controller('log')
 export class LogController {
   constructor(
-    private readonly createLogUseCase: CreateLogUseCase,
     private readonly listLogUseCase: ListLogUseCase,
     private readonly findLogByIdUseCase: FindLogByIdUseCase,
     private readonly findLogByStockUseCase: FindLogByStock,
-    private readonly findStockByIdUseCase: FindStockByIdUseCase,
-    private readonly updateStockUseCase: UpdateStockUseCase,
   ) {}
 
   @Get()
@@ -41,5 +32,4 @@ export class LogController {
       (log) => new ReturnLogDto(log),
     );
   }
-
 }
