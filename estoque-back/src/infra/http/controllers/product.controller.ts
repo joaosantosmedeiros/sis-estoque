@@ -19,31 +19,38 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
+import { Roles } from '../decoretors/roles.decorator';
+import { UserType } from 'src/enums/user-type.enum';
 
 @Controller('product')
 export class ProductController {
   constructor(
-    private findCategoryByIdUseCase: FindCategoryByIdUseCase,
+    private readonly findCategoryByIdUseCase: FindCategoryByIdUseCase,
 
-    private createProductUseCase: CreateProductUseCase,
-    private listAllProductsUseCase: ListProductsUseCase,
-    private findProductByIdUseCase: FindProductByIdUseCase,
-    private findProductByNameUseCase: FindProductByNameUseCase,
-    private findProductByCategoryUseCase: FindProductByCategory,
-    private deleteProductByIdUseCase: DeleteProductUsecase,
-    private updateProductUseCase: UpdateProductUseCase,
+    private readonly createProductUseCase: CreateProductUseCase,
+    private readonly listAllProductsUseCase: ListProductsUseCase,
+    private readonly findProductByIdUseCase: FindProductByIdUseCase,
+    private readonly findProductByNameUseCase: FindProductByNameUseCase,
+    private readonly findProductByCategoryUseCase: FindProductByCategory,
+    private readonly deleteProductByIdUseCase: DeleteProductUsecase,
+    private readonly updateProductUseCase: UpdateProductUseCase,
 
-    private createStockUseCase: CreateStockUseCase,
+    private readonly createStockUseCase: CreateStockUseCase,
   ) {}
 
+  @Roles(UserType.Admin, UserType.User)
   @Get()
-  async list(): Promise<ReturnProductDto[]> {
-    return (await this.listAllProductsUseCase.execute()).map(
+  async list(
+    @Query('includeInactives') includeInactives: boolean,
+  ): Promise<ReturnProductDto[]> {
+    return (await this.listAllProductsUseCase.execute(includeInactives)).map(
       (product) => new ReturnProductDto(product),
     );
   }
 
+  @Roles(UserType.Admin, UserType.User)
   @Get('byName/:name')
   async findByName(@Param('name') name: string): Promise<ReturnProductDto[]> {
     return (await this.findProductByNameUseCase.execute(name)).map(
@@ -51,6 +58,7 @@ export class ProductController {
     );
   }
 
+  @Roles(UserType.Admin, UserType.User)
   @Get(':id')
   async findById(@Param('id') id: number): Promise<ReturnProductDto> {
     return new ReturnProductDto(
@@ -58,6 +66,7 @@ export class ProductController {
     );
   }
 
+  @Roles(UserType.Admin, UserType.User)
   @Get('byCategory/:categoryId')
   async findByCategory(
     @Param('categoryId') categoryId: number,
@@ -67,9 +76,9 @@ export class ProductController {
     ).map((product) => new ReturnProductDto(product));
   }
 
+  @Roles(UserType.Admin)
   @Post()
   async create(@Body() body: CreateProductDto): Promise<ReturnProductDto> {
-    await this.findCategoryByIdUseCase.execute(body.categoryId);
     const product = await this.createProductUseCase.execute(body);
 
     await this.createStockUseCase.execute({
@@ -80,6 +89,7 @@ export class ProductController {
     return new ReturnProductDto(product);
   }
 
+  @Roles(UserType.Admin)
   @Put(':id')
   async update(
     @Param('id') id: number,
@@ -88,7 +98,6 @@ export class ProductController {
     id = Number(id);
 
     await this.findProductByIdUseCase.execute(id);
-    await this.findCategoryByIdUseCase.execute(body.categoryId);
 
     return new ReturnProductDto(
       await this.updateProductUseCase.execute({
@@ -98,6 +107,7 @@ export class ProductController {
     );
   }
 
+  @Roles(UserType.Admin)
   @Delete(':id')
   @HttpCode(204)
   async delete(@Param('id') id: number): Promise<void> {

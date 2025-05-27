@@ -6,6 +6,10 @@ export abstract class CategoryRepository {
   abstract findByName(name: string): Promise<Category | null>;
   abstract list(): Promise<Category[]>;
   abstract create(category: Category): Promise<Category>;
-  abstract update(id: number, name: string): Promise<Category>;
+  abstract update(
+    id: number,
+    name: string,
+    isActive: boolean,
+  ): Promise<Category>;
   abstract delete(id: number): Promise<void>;
 }

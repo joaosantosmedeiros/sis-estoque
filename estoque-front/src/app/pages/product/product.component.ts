@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, model, OnInit } from '@angular/core';
 import { ProductService } from './service/product.service';
 import {
   FormControl,
@@ -7,6 +7,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,6 +24,9 @@ import { ViewProductComponent } from './view-product/view-product.component';
 import { StockService } from './service/stock.service';
 import { Stock } from '../../shared/models/stock';
 import { StockComponent } from './stock/stock.component';
+import { AuthService } from '../../shared/services/auth.service';
+import { Observable } from 'rxjs';
+import { AsyncPipe, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-product',
@@ -35,28 +39,37 @@ import { StockComponent } from './stock/stock.component';
     MatButtonModule,
     MatSelectModule,
     MatTableModule,
+    MatCheckboxModule,
+    AsyncPipe,
+    NgIf,
   ],
   templateUrl: './product.component.html',
   styleUrl: './product.component.scss',
 })
 export class ProductComponent implements OnInit {
   constructor(
-    private categoryService: CategoryService,
-    private productService: ProductService,
-    private snackbarService: SnackbarService,
-    private utilsService: UtilsService,
-    private stockService: StockService
-  ) {}
+    private readonly categoryService: CategoryService,
+    private readonly productService: ProductService,
+    private readonly snackbarService: SnackbarService,
+    private readonly utilsService: UtilsService,
+    private readonly stockService: StockService,
+    private readonly authService: AuthService
+  ) {
+    this.isAdmin = this.authService.isAdmin$;
+  }
 
   categories: Category[] = [];
   products: Product[] = [];
   filteredProducts: Product[] = [];
+  isAdmin: Observable<boolean>;
 
-  displayedColumns: string[] = ['position', 'name', 'actions'];
+  displayedColumns: string[] = ['position', 'name', 'isActive', 'actions'];
 
   dialog = inject(MatDialog);
 
   form!: FormGroup;
+
+  readonly onlyActives = model(true);
 
   ngOnInit() {
     this.getCategories();
@@ -74,19 +87,22 @@ export class ProductComponent implements OnInit {
   getProducts(): void {
     this.productService.list().subscribe((products) => {
       this.products = products;
-      this.filteredProducts = this.products;
+      this.filteredProducts = this.products.filter(
+        (product) => product.isActive
+      );
     });
   }
 
   getCategories(): void {
     this.categoryService.list().subscribe((categories) => {
-      this.categories = categories;
+      this.categories = categories.filter(category => category.isActive);
     });
   }
 
   clearSearch(): void {
     this.form.reset();
     this.filteredProducts = this.products;
+    this.onlyActives.set(false);
   }
 
   async insertDialog() {
@@ -121,7 +137,7 @@ export class ProductComponent implements OnInit {
           },
         });
 
-        if (!result || !result.quantity) return;
+        if (!result?.quantity) return;
 
         this.stockService
           .edit(stock.id, { quantity: result.quantity })
@@ -150,7 +166,7 @@ export class ProductComponent implements OnInit {
       },
     });
 
-    if (result && result.name) {
+    if (result?.name) {
       this.edit(product.id, result);
     }
   }
@@ -169,7 +185,7 @@ export class ProductComponent implements OnInit {
       },
       error: (err) => {
         this.utilsService.onError(
-          err.error.message || 'Erro ao inserir produto'
+          err.error.message ?? 'Erro ao inserir produto'
         );
       },
     });
@@ -183,7 +199,7 @@ export class ProductComponent implements OnInit {
       },
       error: (err) => {
         this.utilsService.onError(
-          err.error.message || 'Erro ao atualizar produto'
+          err.error.message ?? 'Erro ao atualizar produto!'
         );
       },
     });
@@ -197,7 +213,7 @@ export class ProductComponent implements OnInit {
       },
       error: (err) => {
         this.utilsService.onError(
-          err.error.message || 'Erro ao deletar produto'
+          err.error.message ?? 'Erro ao deletar produto!'
         );
       },
     });
@@ -208,6 +224,7 @@ export class ProductComponent implements OnInit {
 
     const nameExists = !(!name || name.trim().length == 0);
     const categoryExists = !(!category || category == null);
+    const onlyActives = this.onlyActives();
 
     if (!nameExists && !categoryExists) {
       this.filteredProducts = this.products;
@@ -227,5 +244,10 @@ export class ProductComponent implements OnInit {
         );
       });
     }
+
+    if (onlyActives)
+      this.filteredProducts = this.filteredProducts.filter(
+        (product) => product.isActive
+      );
   }
 }

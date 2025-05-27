@@ -9,12 +9,19 @@
       }
       <mat-hint align="end">{{name.value.toString().length}} / 60</mat-hint>
     </mat-form-field>
+    <mat-form-field>
+        <mat-label>Ativo</mat-label>
+        <mat-select value="{{ category?.isActive }}" formControlName="isActive">
+          <mat-option [value]="true"> Sim </mat-option>
+          <mat-option [value]="false"> Não </mat-option>
+        </mat-select>
+        @if (isActive.errors) {
+          <mat-error>Ativo é obrigatório</mat-error>
+        }
+      </mat-form-field>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  @if (data.action == 'Editar') {
-    <button mat-mini-fab [mat-dialog-close]="true" (click)="remove()"><mat-icon>delete</mat-icon></button>
-  }
   <button mat-mini-fab form="form" type="submit" (click)="submit()" ><mat-icon>{{ data.action == 'Cadastrar' ? 'check' : 'edit' }} </mat-icon></button>
   <button mat-mini-fab [mat-dialog-close]="true" cdkFocusInitial><mat-icon>close</mat-icon></button>
 </mat-dialog-actions>

@@ -9,6 +9,7 @@ export class PrismaProductMapper {
       name: product.name,
       price: product.price,
       categoryId: product.categoryId,
+      isActive: product.isActive,
     };
   }
 
@@ -18,6 +19,7 @@ export class PrismaProductMapper {
         name: raw.name,
         categoryId: raw.categoryId,
         price: raw.price,
+        isActive: raw.isActive,
         category: raw.category
           ? PrismaCategoryMapper.toDomain(raw.category)
           : undefined,

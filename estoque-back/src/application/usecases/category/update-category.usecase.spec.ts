@@ -24,6 +24,7 @@ describe('UpdateCategoryUseCase', () => {
     const updatedCategory = await updateCategory.execute({
       id: category.id!,
       name: 'updated_name',
+      isActive: true,
     });
     const actual = updatedCategory.name;
 
@@ -37,6 +38,7 @@ describe('UpdateCategoryUseCase', () => {
       updateCategory.execute({
         id: -999,
         name: 'any_name',
+        isActive: true,
       }),
     ).rejects.toThrow();
   });
@@ -53,6 +55,7 @@ describe('UpdateCategoryUseCase', () => {
       updateCategory.execute({
         id: category.id!,
         name: 'another_category',
+        isActive: true,
       }),
     ).rejects.toThrow(EntityAlreadyExistsError);
   });

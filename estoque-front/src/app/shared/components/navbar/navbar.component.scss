@@ -1,14 +1,16 @@
 .navbar {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 1em 2em;
   background: rgb(190, 220, 246);
   font-weight: 600;
+  height: 50px;
 }
 
-.navbar-links {
+.navbar-group {
   display: flex;
-  gap: 5px;
+  gap: 10px;
 }
 
 .home {

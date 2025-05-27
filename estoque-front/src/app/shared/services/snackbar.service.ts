@@ -6,7 +6,7 @@ import { SnackbarSuccessComponent } from '../components/snackbar-success/snackba
   providedIn: 'root',
 })
 export class SnackbarService {
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private readonly snackBar: MatSnackBar) {}
 
   open(message: string) {
     this.snackBar.openFromComponent(SnackbarSuccessComponent, {

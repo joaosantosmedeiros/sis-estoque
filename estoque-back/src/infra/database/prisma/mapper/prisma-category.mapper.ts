@@ -5,6 +5,7 @@ export class PrismaCategoryMapper {
     return {
       id: category.id,
       name: category.name,
+      isActive: category.isActive,
     };
   }
 
@@ -12,6 +13,7 @@ export class PrismaCategoryMapper {
     return new Category(
       {
         name: raw.name,
+        isActive: raw.isActive,
       },
       raw.id,
     );

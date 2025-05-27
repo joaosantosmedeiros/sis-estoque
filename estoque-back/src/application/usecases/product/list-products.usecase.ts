@@ -6,7 +6,7 @@ import { Injectable } from '@nestjs/common';
 export class ListProductsUseCase {
   constructor(private readonly productRepository: ProductRepository) {}
 
-  async execute(): Promise<Product[]> {
-    return this.productRepository.list();
+  async execute(includeInactives?: boolean): Promise<Product[]> {
+    return this.productRepository.list(includeInactives);
   }
 }

@@ -16,6 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-category-detail',
@@ -27,6 +28,7 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     MatIconModule,
     MatButtonModule,
+    MatSelectModule,
   ],
   templateUrl: './category-detail.component.html',
   styleUrl: './category-detail.component.scss',
@@ -34,7 +36,8 @@ import { MatInputModule } from '@angular/material/input';
 export class CategoryDetailComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    @Optional() private dialogRef: MatDialogRef<CategoryDetailComponent>
+    @Optional()
+    private readonly dialogRef: MatDialogRef<CategoryDetailComponent>
   ) {}
 
   form!: FormGroup;
@@ -51,10 +54,14 @@ export class CategoryDetailComponent implements OnInit {
 
   createForm(): void {
     this.form = new FormGroup({
-      name: new FormControl(this.category?.name || '', [
+      name: new FormControl(this.category?.name ?? '', [
         Validators.required,
         Validators.maxLength(60),
       ]),
+      isActive: new FormControl(
+        { value: this.category?.isActive, disabled: false },
+        Validators.required
+      ),
     });
   }
 
@@ -64,13 +71,11 @@ export class CategoryDetailComponent implements OnInit {
     this.dialogRef.close(this.form.getRawValue());
   }
 
-  remove(): void {
-    if (!this.category) return;
-
-    this.dialogRef.close({ removeId: this.category.id });
-  }
-
   get name() {
     return this.form.get('name')!;
+  }
+
+  get isActive() {
+    return this.form.get('isActive')!;
   }
 }

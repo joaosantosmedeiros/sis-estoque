@@ -36,11 +36,12 @@ export class InMemoryCategoryRepository implements CategoryRepository {
     return newCategory;
   }
 
-  async update(id: number, name: string): Promise<Category> {
+  async update(id: number, name: string, isActive: boolean): Promise<Category> {
     const index = this.categories.findIndex((ctegory) => ctegory.id === id);
     if (index == -1) throw new Error('Category not found');
 
     this.categories[index].name = name;
+    this.categories[index].isActive = isActive;
 
     return this.categories[index];
   }

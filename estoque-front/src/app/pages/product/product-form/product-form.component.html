@@ -37,6 +37,16 @@
           <mat-error>Preço mínimo: 1,00</mat-error>
         }
       </mat-form-field>
+      <mat-form-field>
+        <mat-label>Ativo</mat-label>
+        <mat-select value="{{ product?.isActive }}" formControlName="isActive">
+          <mat-option [value]="true"> Sim </mat-option>
+          <mat-option [value]="false"> Não </mat-option>
+        </mat-select>
+        @if (isActive.errors) {
+          <mat-error>Ativo é obrigatório</mat-error>
+        }
+      </mat-form-field>
     </div>
   </form>
 </mat-dialog-content>

@@ -19,6 +19,7 @@ export class PrismaLogRepository implements LogRepository {
             product: true,
           },
         },
+        Account: true,
       },
     });
 
@@ -37,6 +38,7 @@ export class PrismaLogRepository implements LogRepository {
               product: true,
             },
           },
+          Account: true,
         },
       })
     ).map((prismaLog) => PrismaLogMapper.toDomain(prismaLog));
@@ -51,6 +53,7 @@ export class PrismaLogRepository implements LogRepository {
               product: true,
             },
           },
+          Account: true,
         },
         orderBy: [{ id: 'asc' }],
       })

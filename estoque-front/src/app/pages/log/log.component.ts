@@ -46,9 +46,9 @@ export class LogComponent implements OnInit {
   displayedColumns: string[] = [
     'position',
     'product',
+    'account',
     'quantity',
     'date',
-    'actions',
   ];
 
   constructor(
@@ -58,8 +58,19 @@ export class LogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.getLogs();
     this.getStocks();
     this.createForm();
+  }
+
+  getLogs(): void {
+    this.logService.list().subscribe({
+      next: (logs) => (this.logs = logs),
+      error: (err) =>
+        this.utilsService.onError(
+          err.error?.message ?? 'Erro ao carregar logs!'
+        ),
+    });
   }
 
   getStocks(): void {
@@ -101,12 +112,14 @@ export class LogComponent implements OnInit {
             err.error?.message ?? 'Erro ao listar logs!'
           ),
       });
+    } else {
+      this.getLogs();
     }
   }
 
   clearSearch() {
     this.form.reset();
-    this.logs = [];
+    this.getLogs();
   }
 
   get stock() {

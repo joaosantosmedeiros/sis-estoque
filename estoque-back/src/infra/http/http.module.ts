@@ -29,14 +29,23 @@ import { CreateLogUseCase } from '@application/usecases/log/create-log.usecase';
 import { ListLogUseCase } from '@application/usecases/log/list-logs.usecase';
 import { UpdateStockUseCase } from '@application/usecases/stock/update-stock.usecase';
 import { FindCategoryContainingNameUseCase } from '@application/usecases/category/find-category-containing-name.usecase';
+import { AccountController } from './controllers/account.controller';
+import { CreateAccountUseCase } from '@application/usecases/account/create-account-usecase';
+import { FindAccountByIdUseCase } from '@application/usecases/account/find-account-by-id-usecase';
+import { FindAccountByNameUseCase } from '@application/usecases/account/find-account-by-name-usecase';
+import { UpdateAccountUseCase } from '@application/usecases/account/update-account-usecase';
+import { DeleteAccountUseCase } from '@application/usecases/account/delete-account-usecase';
+import { ListAccountsUseCase } from '@application/usecases/account/list-accounts-usecase';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, AuthModule],
   controllers: [
     CategoryController,
     ProductController,
     StockController,
     LogController,
+    AccountController,
   ],
   providers: [
     { provide: APP_INTERCEPTOR, useClass: ErrorInterceptor },
@@ -66,6 +75,13 @@ import { FindCategoryContainingNameUseCase } from '@application/usecases/categor
     FindLogByIdUseCase,
     FindLogByStock,
     ListLogUseCase,
+
+    CreateAccountUseCase,
+    FindAccountByIdUseCase,
+    FindAccountByNameUseCase,
+    ListAccountsUseCase,
+    UpdateAccountUseCase,
+    DeleteAccountUseCase,
   ],
 })
 export class HttpModule {}

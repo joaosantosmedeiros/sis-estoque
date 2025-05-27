@@ -1,3 +1,4 @@
+import { Account } from "./account";
 import { Stock } from "./stock";
 
 export interface Log {
@@ -5,4 +6,5 @@ export interface Log {
   quantity: number;
   date: Date;
   stock: Stock;
+  account: Account;
 }

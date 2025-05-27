@@ -10,6 +10,7 @@ describe('CreateLogUseCase', () => {
       date: new Date(),
       quantity: 22,
       stock: new Stock({ productId: 0, quantity: 2 }),
+      accountId: 1,
     };
 
     const log = await createLog.execute(request);
@@ -18,5 +19,6 @@ describe('CreateLogUseCase', () => {
     expect(log.quantity).toBe(request.quantity);
     expect(log.stockId).toBe(request.stock.id);
     expect(log.id).toBe(0);
+    expect(log.accountId).toBe(1);
   });
 });

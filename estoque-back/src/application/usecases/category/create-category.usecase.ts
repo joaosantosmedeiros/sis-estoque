@@ -6,17 +6,18 @@ import { EntityAlreadyExistsError } from '@application/errors/entity-already-exi
 
 export interface CreateCategoryRequest {
   name: string;
+  isActive: boolean;
 }
 
 @Injectable()
 export class CreateCategoryUseCase {
   constructor(
-    private categoryRepository: CategoryRepository,
-    private findCategoryByName: FindCategoryByNameUseCase,
+    private readonly categoryRepository: CategoryRepository,
+    private readonly findCategoryByName: FindCategoryByNameUseCase,
   ) {}
 
   async execute(request: CreateCategoryRequest): Promise<Category> {
-    const { name } = request;
+    const { name, isActive } = request;
 
     const categoryExists = await this.findCategoryByName.execute(name);
     if (categoryExists) {
@@ -25,6 +26,7 @@ export class CreateCategoryUseCase {
 
     const category = new Category({
       name,
+      isActive,
     });
 
     return this.categoryRepository.create(category);

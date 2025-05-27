@@ -10,6 +10,9 @@ import { CreateStockDto } from '@infra/dto/create-stock.dto';
 import { ReturnStockDto } from '@infra/dto/return-stock.dto';
 import { UpdateStockDto } from '@infra/dto/update-stock-dto';
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { AccountId } from '../decoretors/account-id.decorator';
+import { UserType } from 'src/enums/user-type.enum';
+import { Roles } from '../decoretors/roles.decorator';
 
 @Controller('stock')
 export class StockController {
@@ -24,6 +27,7 @@ export class StockController {
     private readonly createLogUseCase: CreateLogUseCase,
   ) {}
 
+  @Roles(UserType.Admin, UserType.User)
   @Get()
   async list(): Promise<ReturnStockDto[]> {
     return (await this.listStockUseCase.execute()).map(
@@ -31,6 +35,7 @@ export class StockController {
     );
   }
 
+  @Roles(UserType.Admin, UserType.User)
   @Get(':id')
   async findById(@Param('id') id: number): Promise<ReturnStockDto> {
     return new ReturnStockDto(
@@ -38,6 +43,7 @@ export class StockController {
     );
   }
 
+  @Roles(UserType.Admin, UserType.User)
   @Get('byProduct/:productId')
   async findByProduct(
     @Param('productId') productId: number,
@@ -47,6 +53,7 @@ export class StockController {
     );
   }
 
+  @Roles(UserType.Admin, UserType.User)
   @Post()
   async create(@Body() body: CreateStockDto): Promise<ReturnStockDto> {
     await this.findProductByIdUseCase.execute(body.productId);
@@ -54,10 +61,12 @@ export class StockController {
     return new ReturnStockDto(await this.createStockUseCase.execute(body));
   }
 
+  @Roles(UserType.Admin, UserType.User)
   @Put(':id')
   async update(
     @Param('id') id: number,
     @Body() body: UpdateStockDto,
+    @AccountId() accountId: number,
   ): Promise<ReturnStockDto> {
     id = Number(id);
     const stock = await this.findStockByIdUseCase.execute(id);
@@ -69,6 +78,7 @@ export class StockController {
       date: new Date(),
       quantity: updatedStock.quantity - stock.quantity,
       stock,
+      accountId,
     });
 
     return new ReturnStockDto(updatedStock);

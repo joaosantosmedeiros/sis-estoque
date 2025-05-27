@@ -18,10 +18,12 @@ describe('Create Category Use Case', () => {
 
     const category = await createCategory.execute({
       name: 'any_name',
+      isActive: true,
     });
 
     const category2 = await createCategory.execute({
       name: 'another_name',
+      isActive: true,
     });
 
     expect(category).toBeTruthy();
@@ -36,11 +38,13 @@ describe('Create Category Use Case', () => {
 
     await createCategory.execute({
       name: 'any_name',
+      isActive: true,
     });
 
     await expect(
       createCategory.execute({
         name: 'any_name',
+        isActive: true,
       }),
     ).rejects.toThrow(EntityAlreadyExistsError);
   });

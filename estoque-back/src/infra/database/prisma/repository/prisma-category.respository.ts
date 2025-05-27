@@ -6,7 +6,7 @@ import { Category } from '@application/entities/category';
 
 @Injectable()
 export class PrismaCategoryRepository implements CategoryRepository {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async findById(id: number): Promise<Category | null> {
     const raw = await this.prismaService.category.findUnique({
@@ -55,10 +55,10 @@ export class PrismaCategoryRepository implements CategoryRepository {
     );
   }
 
-  async update(id: number, name: string): Promise<Category> {
+  async update(id: number, name: string, isActive: boolean): Promise<Category> {
     const raw = await this.prismaService.category.update({
       where: { id },
-      data: { name },
+      data: { name, isActive },
     });
 
     return PrismaCategoryMapper.toDomain(raw);

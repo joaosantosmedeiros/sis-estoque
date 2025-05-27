@@ -7,6 +7,7 @@ export interface CreateLogRequest {
   date: Date;
   quantity: number;
   stock: Stock;
+  accountId: number;
 }
 
 @Injectable()
@@ -18,6 +19,7 @@ export class CreateLogUseCase {
       date: new Date(request.date),
       quantity: request.quantity,
       stockId: request.stock.id!,
+      accountId: request.accountId,
     });
 
     return this.logRepository.create(log);

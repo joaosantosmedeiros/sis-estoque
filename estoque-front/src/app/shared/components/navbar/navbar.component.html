@@ -1,8 +1,21 @@
 <div class="navbar">
-  <a class="home" routerLink="/">Início</a>
-  <ul class="navbar-links">
-    <li><a routerLink="category">Categorias</a></li>
-    <li><a routerLink="product">Produtos</a></li>
-    <li><a routerLink="log">Logs</a></li>
-  </ul>
+  <div class="navbar-group">
+    <a class="home" routerLink="/">Início</a>
+  </div>
+
+  <div class="navbar-group">
+    <button *ngIf="isLoggedIn$ | async" mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+    <mat-menu #menu="matMenu">
+      <a routerLink="category"><button mat-menu-item>Categorias</button></a>
+      <a routerLink="product"><button mat-menu-item>Produtos</button></a>
+      <a routerLink="log"><button mat-menu-item>Logs</button></a>
+      <a *ngIf="isAdmin$ | async" routerLink="account"><button mat-menu-item>Usuários</button></a>
+    </mat-menu>
+
+    <button *ngIf="isLoggedIn$ | async" mat-button [matMenuTriggerFor]="profile"><mat-icon>person</mat-icon></button>
+    <mat-menu #profile="matMenu">
+      <button (click)="editAccountDialog()" mat-menu-item>Editar Conta</button>
+      <button (click)="logout()" mat-menu-item>Logout</button>
+    </mat-menu>
+  </div>
 </div>

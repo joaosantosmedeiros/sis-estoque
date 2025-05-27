@@ -3,6 +3,7 @@ import { Category } from './category';
 export interface ProductProps {
   name: string;
   price: number;
+  isActive: boolean;
   category?: Category;
   categoryId: number;
 }
@@ -54,5 +55,13 @@ export class Product {
 
   public set categoryId(categoryId: number) {
     this.props.categoryId = categoryId;
+  }
+
+  public get isActive(): boolean {
+    return this.props.isActive;
+  }
+
+  public set isActive(isActive: boolean) {
+    this.props.isActive = isActive;
   }
 }

@@ -7,6 +7,7 @@ import { EntityAlreadyExistsError } from '@application/errors/entity-already-exi
 export interface UpdateCategoryRequest {
   id: number;
   name: string;
+  isActive: boolean;
 }
 
 @Injectable()
@@ -22,6 +23,10 @@ export class UpdateCategoryUseCase {
       throw new EntityAlreadyExistsError('Categoria');
     }
 
-    return this.categoryRepository.update(request.id, request.name);
+    return this.categoryRepository.update(
+      request.id,
+      request.name,
+      request.isActive,
+    );
   }
 }

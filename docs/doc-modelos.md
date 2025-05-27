@@ -22,6 +22,7 @@ classDiagram
     Log : +long id PK
     Log : +Date data_movimentacao
     Log : +int id_estoque
+    Log : +int quantidade
     Log : buscarPorData()
 
     Estoque: +long id
@@ -71,6 +72,7 @@ erDiagram
         long id PK
         Date data_movimentacao
         long id_estoque FK 
+        int quantidade
     }
 
     ESTOQUE {
@@ -108,3 +110,4 @@ erDiagram
 | id_estoque         | id do estoque relacionado ao log              | BIGINT       | 150    | FK / Not Null |
 | quantidade         | quantidade do estoque                         | INT          | --     | Not Null |
 | id_produto         | id do produto relacionado ao estoque          | BIGINT       | --     | FK / Unique / Not Null |
+| quantidade         | quantidade alterada no log do estoque         | BIGINT       | --     | Not Null |

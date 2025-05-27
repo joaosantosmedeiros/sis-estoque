@@ -17,18 +17,21 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { Roles } from '../decoretors/roles.decorator';
+import { UserType } from 'src/enums/user-type.enum';
 
 @Controller('category')
 export class CategoryController {
   constructor(
-    private createCategoryUseCase: CreateCategoryUseCase,
-    private listAllCategoriesUseCase: ListCategoriesUseCase,
-    private findCategoryByIdUseCase: FindCategoryByIdUseCase,
-    private findCategoryContainingNameUseCase: FindCategoryContainingNameUseCase,
-    private deleteCategoryByIdUseCase: DeleteCategoryUseCase,
-    private updateCategoryUseCase: UpdateCategoryUseCase,
+    private readonly createCategoryUseCase: CreateCategoryUseCase,
+    private readonly listAllCategoriesUseCase: ListCategoriesUseCase,
+    private readonly findCategoryByIdUseCase: FindCategoryByIdUseCase,
+    private readonly findCategoryContainingNameUseCase: FindCategoryContainingNameUseCase,
+    private readonly deleteCategoryByIdUseCase: DeleteCategoryUseCase,
+    private readonly updateCategoryUseCase: UpdateCategoryUseCase,
   ) {}
 
+  @Roles(UserType.User, UserType.Admin)
   @Get()
   async list(): Promise<ReturnCategoryDto[]> {
     return (await this.listAllCategoriesUseCase.execute()).map(
@@ -36,6 +39,7 @@ export class CategoryController {
     );
   }
 
+  @Roles(UserType.User, UserType.Admin)
   @Get(':id')
   async findById(@Param('id') id: number): Promise<ReturnCategoryDto> {
     return new ReturnCategoryDto(
@@ -43,6 +47,7 @@ export class CategoryController {
     );
   }
 
+  @Roles(UserType.User, UserType.Admin)
   @Get('byName/:name')
   async findByName(@Param('name') name: string): Promise<ReturnCategoryDto[]> {
     return (await this.findCategoryContainingNameUseCase.execute(name)).map(
@@ -50,6 +55,7 @@ export class CategoryController {
     );
   }
 
+  @Roles(UserType.Admin)
   @Post()
   async create(@Body() body: CreateCategoryDto): Promise<ReturnCategoryDto> {
     return new ReturnCategoryDto(
@@ -57,6 +63,7 @@ export class CategoryController {
     );
   }
 
+  @Roles(UserType.Admin)
   @Put(':id')
   async update(
     @Param('id') id: number,
@@ -69,11 +76,12 @@ export class CategoryController {
     return new ReturnCategoryDto(
       await this.updateCategoryUseCase.execute({
         id,
-        name: body.name,
+        ...body,
       }),
     );
   }
 
+  @Roles(UserType.Admin)
   @Delete(':id')
   @HttpCode(204)
   async delete(@Param('id') id: number): Promise<void> {

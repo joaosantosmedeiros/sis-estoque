@@ -5,5 +5,6 @@ export function makeProduct(name = 'any_name'): Product {
     name,
     categoryId: 0,
     price: 25.5,
-  }) as Product;
+    isActive: true,
+  });
 }

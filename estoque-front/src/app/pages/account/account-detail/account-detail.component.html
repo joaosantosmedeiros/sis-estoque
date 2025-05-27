@@ -1,0 +1,48 @@
+<h2 mat-dialog-title> {{data.action}} Conta</h2>
+<mat-dialog-content>
+  <form [formGroup]="form" id="form">
+    <mat-form-field>
+      <mat-label>Login</mat-label>
+      <input matInput [formControlName]="'name'" />
+      @if (name.errors && name.errors['required']) {
+        <mat-error>Login é obrigatório</mat-error>
+      }
+      <mat-hint align="end">{{name.value.toString().length}} / 60</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Senha</mat-label>
+      <input type="password" minlength="8" matInput [formControlName]="'password'" />
+      @if (password.errors && password.errors['required']) {
+        <mat-error>Senha é obrigatória</mat-error>
+      }
+      @else if (password.errors && password.errors['minlength']) {
+        <mat-error>Mínimo de 8 caracteres</mat-error>
+      }
+      @else if (password.errors && password.errors['passwordDontMatch']) {
+        <mat-error>Senhas não coincidem</mat-error>
+      }
+      <mat-hint align="end">{{password.value.toString().length}} / 60</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Confirme a senha</mat-label>
+      <input type="password" minlength="8" matInput [formControlName]="'confirmPassword'" />
+      @if (confirmPassword.errors && confirmPassword.errors['required']) {
+        <mat-error>Confirmação é obrigatória</mat-error>
+      }
+      @else if (confirmPassword.errors && confirmPassword.errors['minlength']) {
+        <mat-error>Mínimo de 8 caracteres</mat-error>
+      }
+      @else if (confirmPassword.errors && confirmPassword.errors['passwordDontMatch']) {
+        <mat-error>Senhas não coincidem</mat-error>
+      }
+      <mat-hint align="end">{{confirmPassword.value.toString().length}} / 60</mat-hint>
+    </mat-form-field>
+    <mat-error *ngIf="form.hasError('passwordDontMatch')">
+  As senhas não coincidem.
+</mat-error>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-mini-fab form="form" type="submit" (click)="submit()" ><mat-icon>{{ data.action == 'Cadastrar' ? 'check' : 'edit' }} </mat-icon></button>
+  <button mat-mini-fab [mat-dialog-close]="true" cdkFocusInitial><mat-icon>close</mat-icon></button>
+</mat-dialog-actions>
