@@ -1,11 +1,6 @@
 import { Component, inject, model, OnInit } from '@angular/core';
 import { ProductService } from './service/product.service';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -22,10 +17,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { ViewProductComponent } from './view-product/view-product.component';
 import { StockService } from './service/stock.service';
-import { Stock } from '../../shared/models/stock';
 import { StockComponent } from './stock/stock.component';
 import { AuthService } from '../../shared/services/auth.service';
-import { Observable } from 'rxjs';
+import { firstValueFrom, Observable } from 'rxjs';
 import { AsyncPipe, NgIf } from '@angular/common';
 
 @Component({
@@ -87,15 +81,13 @@ export class ProductComponent implements OnInit {
   getProducts(): void {
     this.productService.list().subscribe((products) => {
       this.products = products;
-      this.filteredProducts = this.products.filter(
-        (product) => product.isActive
-      );
+      this.filteredProducts = this.products.filter((product) => product.isActive);
     });
   }
 
   getCategories(): void {
     this.categoryService.list().subscribe((categories) => {
-      this.categories = categories.filter(category => category.isActive);
+      this.categories = categories.filter((category) => category.isActive);
     });
   }
 
@@ -128,33 +120,22 @@ export class ProductComponent implements OnInit {
   }
 
   async viewStock(id: number) {
-    this.stockService.findByProduct(id).subscribe({
-      next: async (stock: Stock) => {
-        const result = await this.utilsService.openDialog({
-          component: StockComponent,
-          data: {
-            stock,
-          },
-        });
+    try {
+      const stock = await firstValueFrom(this.stockService.findByProduct(id));
 
-        if (!result?.quantity) return;
+      const result = await this.utilsService.openDialog({
+        component: StockComponent,
+        data: { stock },
+      });
 
-        this.stockService
-          .edit(stock.id, { quantity: result.quantity })
-          .subscribe({
-            next: () =>
-              this.snackbarService.open('Estoque atualizado com sucesso!'),
-            error: (err) =>
-              this.utilsService.onError(
-                err.error?.message ?? 'Erro ao atualizar estoque!'
-              ),
-          });
-      },
-      error: (err) =>
-        this.utilsService.onError(
-          err.error?.message ?? 'Erro ao carregar estoque!'
-        ),
-    });
+      if (!result?.quantity) return;
+
+      await firstValueFrom(this.stockService.edit(stock.id, { quantity: result.quantity }));
+
+      this.snackbarService.open('Estoque atualizado com sucesso!');
+    } catch (err: any) {
+      this.utilsService.onError(err?.error?.message ?? 'Erro ao processar operação!');
+    }
   }
 
   async editDialog(product: any) {
@@ -184,9 +165,7 @@ export class ProductComponent implements OnInit {
         this.getProducts();
       },
       error: (err) => {
-        this.utilsService.onError(
-          err.error.message ?? 'Erro ao inserir produto'
-        );
+        this.utilsService.onError(err.error.message ?? 'Erro ao inserir produto');
       },
     });
   }
@@ -198,9 +177,7 @@ export class ProductComponent implements OnInit {
         this.getProducts();
       },
       error: (err) => {
-        this.utilsService.onError(
-          err.error.message ?? 'Erro ao atualizar produto!'
-        );
+        this.utilsService.onError(err.error.message ?? 'Erro ao atualizar produto!');
       },
     });
   }
@@ -212,9 +189,7 @@ export class ProductComponent implements OnInit {
         this.getProducts();
       },
       error: (err) => {
-        this.utilsService.onError(
-          err.error.message ?? 'Erro ao deletar produto!'
-        );
+        this.utilsService.onError(err.error.message ?? 'Erro ao deletar produto!');
       },
     });
   }
@@ -229,25 +204,15 @@ export class ProductComponent implements OnInit {
     if (!nameExists && !categoryExists) {
       this.filteredProducts = this.products;
     } else if (!nameExists && categoryExists) {
-      this.filteredProducts = this.products.filter(
-        (product) => product.category.id == category
-      );
+      this.filteredProducts = this.products.filter((product) => product.category.id == category);
     } else if (nameExists && !categoryExists) {
-      this.filteredProducts = this.products.filter((product) =>
-        product.name.toLowerCase().includes(name.trim().toLowerCase())
-      );
+      this.filteredProducts = this.products.filter((product) => product.name.toLowerCase().includes(name.trim().toLowerCase()));
     } else {
       this.filteredProducts = this.products.filter((product) => {
-        return (
-          product.name.toLowerCase().includes(name.trim().toLowerCase()) &&
-          product.category.id == category
-        );
+        return product.name.toLowerCase().includes(name.trim().toLowerCase()) && product.category.id == category;
       });
     }
 
-    if (onlyActives)
-      this.filteredProducts = this.filteredProducts.filter(
-        (product) => product.isActive
-      );
+    if (onlyActives) this.filteredProducts = this.filteredProducts.filter((product) => product.isActive);
   }
 }
