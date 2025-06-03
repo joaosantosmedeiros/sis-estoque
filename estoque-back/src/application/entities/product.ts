@@ -10,7 +10,7 @@ export interface ProductProps {
 
 export class Product {
   private _id?: number;
-  private props: ProductProps;
+  private readonly props: ProductProps;
 
   constructor(props: ProductProps, id?: number) {
     this._id = id ?? undefined;

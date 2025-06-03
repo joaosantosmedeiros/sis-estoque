@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class FindCategoryContainingNameUseCase {
-  constructor(private categoryRepository: CategoryRepository) {}
+  constructor(private readonly categoryRepository: CategoryRepository) {}
 
   async execute(name: string): Promise<Category[]> {
     return this.categoryRepository.findContainingName(name);

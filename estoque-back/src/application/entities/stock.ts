@@ -8,7 +8,7 @@ export interface StockProps {
 
 export class Stock {
   private _id?: number;
-  private props: StockProps;
+  private readonly props: StockProps;
 
   constructor(props: StockProps, id?: number) {
     this._id = id ?? undefined;
