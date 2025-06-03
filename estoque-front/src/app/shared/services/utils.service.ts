@@ -8,7 +8,7 @@ import { MessageDialogConfirmComponent } from '../components/message-dialog-conf
   providedIn: 'root',
 })
 export class UtilsService {
-  constructor(private dialog: MatDialog) {}
+  constructor(private readonly dialog: MatDialog) {}
 
   onError(message: string) {
     return this.dialog.open(ErrorDialogComponent, {

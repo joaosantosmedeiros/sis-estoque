@@ -8,9 +8,9 @@ import { StockRequest } from '../../../shared/models/stock.request';
   providedIn: 'root',
 })
 export class StockService {
-  private stockBaseUrl = 'http://localhost:3000/stock';
+  private readonly stockBaseUrl = 'http://localhost:3000/stock';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   list(): Observable<Stock[]> {
     return this.http.get<Stock[]>(this.stockBaseUrl);

@@ -15,7 +15,6 @@ import { MatIconModule } from '@angular/material/icon';
     MatDialogTitle
   ],
   templateUrl: './message-dialog-confirm.component.html',
-  styleUrl: './message-dialog-confirm.component.scss'
 })
 export class MessageDialogConfirmComponent {
 

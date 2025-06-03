@@ -20,9 +20,9 @@ import { Stock } from '../../../shared/models/stock';
 export class ViewProductComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    @Optional() private dialogRef: MatDialogRef<ViewProductComponent>,
+    @Optional() private readonly dialogRef: MatDialogRef<ViewProductComponent>,
     public utilsService: UtilsService,
-    private stockService: StockService
+    private readonly stockService: StockService
   ) {}
 
   product: Product | null = null;
@@ -46,7 +46,7 @@ export class ViewProductComponent implements OnInit {
       },
       error: (err) => {
         this.utilsService.onError(
-          err.error?.message || 'Erro ao carregar estoque!'
+          err.error?.message ?? 'Erro ao carregar estoque!'
         );
       },
     });

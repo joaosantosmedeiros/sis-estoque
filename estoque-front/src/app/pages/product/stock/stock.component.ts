@@ -29,12 +29,11 @@ import { MatButtonModule } from '@angular/material/button';
     MatButtonModule,
   ],
   templateUrl: './stock.component.html',
-  styleUrl: './stock.component.scss',
 })
 export class StockComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    @Optional() private dialogRef: MatDialogRef<StockComponent>
+    @Optional() private readonly dialogRef: MatDialogRef<StockComponent>
   ) {}
 
   stock: Stock | null = null;

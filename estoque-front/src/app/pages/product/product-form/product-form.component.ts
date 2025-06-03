@@ -34,7 +34,6 @@ import { MatSelectModule } from '@angular/material/select';
     MatSelectModule,
   ],
   templateUrl: './product-form.component.html',
-  styleUrl: './product-form.component.scss',
 })
 export class ProductDetailComponent implements OnInit {
   constructor(
