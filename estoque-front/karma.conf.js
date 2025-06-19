@@ -26,11 +26,7 @@ module.exports = function (config) {
     coverageReporter: {
       dir: require("path").join(__dirname, "./coverage/estoque-front"),
       subdir: ".",
-      reporters: [
-        { type: "html" },
-        { type: "lcovonly" },
-        { type: "text-summary" },
-      ],
+      reporters: [{ type: "html" }, { type: "text-summary" }, { type: "lcovonly" }],
     },
     reporters: ["progress", "kjhtml"],
     browsers: ["Chrome"],

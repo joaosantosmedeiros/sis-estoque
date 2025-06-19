@@ -6,18 +6,9 @@ import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-message-dialog-confirm',
   standalone: true,
-  imports: [
-    MatButtonModule,
-    MatIconModule,
-    MatDialogClose,
-    MatDialogContent,
-    MatDialogActions,
-    MatDialogTitle
-  ],
+  imports: [MatButtonModule, MatIconModule, MatDialogClose, MatDialogContent, MatDialogActions, MatDialogTitle],
   templateUrl: './message-dialog-confirm.component.html',
 })
 export class MessageDialogConfirmComponent {
-
-  constructor(@Optional() @Inject(MAT_DIALOG_DATA) public msg: string) { }
-
+  constructor(@Optional() @Inject(MAT_DIALOG_DATA) public msg: string) {}
 }

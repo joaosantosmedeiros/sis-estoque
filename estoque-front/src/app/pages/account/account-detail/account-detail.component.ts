@@ -41,8 +41,8 @@ export class AccountDetailComponent implements OnInit {
   account: Account | null = null;
 
   ngOnInit(): void {
-    this.initiateData();
     this.createForm();
+    this.initiateData();
   }
 
   initiateData(): void {

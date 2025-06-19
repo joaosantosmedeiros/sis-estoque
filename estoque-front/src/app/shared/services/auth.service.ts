@@ -13,21 +13,14 @@ export class AuthService {
   private readonly userTypeKey = 'user_type';
   private readonly platformId = inject(PLATFORM_ID);
 
-  private readonly isLoggedInSubject = new BehaviorSubject<boolean>(
-    this.hasToken()
-  );
+  private readonly isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
-  private readonly isAdminSubject = new BehaviorSubject<boolean>(
-    this.isAdmin()
-  );
+  private readonly isAdminSubject = new BehaviorSubject<boolean>(this.isAdmin());
   public isAdmin$ = this.isAdminSubject.asObservable();
 
   constructor(private readonly http: HttpClient) {}
 
-  login(credentials: {
-    name: string;
-    password: string;
-  }): Observable<Authentication> {
+  login(credentials: { name: string; password: string }): Observable<Authentication> {
     return this.http.post<Authentication>(`${this.apiUrl}`, credentials);
   }
 
@@ -68,7 +61,7 @@ export class AuthService {
 
   private isAdmin(): boolean {
     if (!this.isBrowser()) return false;
-    return localStorage.getItem(this.userTypeKey) == "0";
+    return localStorage.getItem(this.userTypeKey) == '0';
   }
 
   private isBrowser(): boolean {
