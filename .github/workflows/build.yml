@@ -30,7 +30,7 @@ jobs:
         working-directory: ./estoque-front
         run: |
           npm install
-          npx ng test --code-coverage
+          npx ng test --code-coverage --watch=false --browsers=ChromeHeadless"
 
       - name: Combinar arquivos de cobertura
         run: |
