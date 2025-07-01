@@ -16,7 +16,7 @@ const config: Config = {
     '!**/node_modules/**',
     '!**/dist/**',
   ],
-  coverageDirectory: '../coverage',
+  coverageDirectory: './coverage',
   testEnvironment: 'node',
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/',
